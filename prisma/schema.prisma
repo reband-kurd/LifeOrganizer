@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+model Tasks{
+  id Int @id @default(autoincrement())
+  title String
+  StartsAt DateTime
+  EndsAt DateTime
+  isDone Boolean @default(false)
+  Calenderdays Calenderdays[]
+  calenderdaysId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Calenderdays{
+  id Int @id @default(autoincrement())
+  date DateTime
+  tasks Tasks[] 
+}
+model Notes{
+  id Int @id @default(autoincrement())
+  title String
+  content String
+  isPinned Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Events{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  location String
+  startsAt DateTime
+  endsAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Habits{
+  id Int @id @default(autoincrement())
+  HabitsTracker HabitTracker[]
+  title String
+  description String
+  frequency String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model HabitTracker{
+  id Int @id @default(autoincrement())
+  habitId Int
+  date DateTime
+  isCompleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habit Habits @relation(fields: [habitId], references: [id])
+}
+model Goals{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  deadline DateTime
+  isAchieved Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Journals{
+  id Int @id @default(autoincrement())
+  title String
+  content String
+  mood String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Projects{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  deadline DateTime
+  isCompleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Lectures{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  date DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Exams{
+  id Int @id @default(autoincrement())
+  subject String
+  date DateTime
+  location String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Assignments{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  dueDate DateTime
+  isSubmitted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model TimeSchedule{
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  startTime DateTime
+  endTime DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
