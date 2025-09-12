@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="font-sans min-h-screen bg-gradient-to-b from-background to-gray-50 dark:from-background dark:to-gray-900">
+    <div className="font-sans min-h-screen bg-gradient-to-b from-background to-secondary">
       {/* Hero Section */}
       <header className="relative pt-24 pb-16 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
         <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -45,11 +45,11 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Task Management */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 mb-6">
+          <div className="bg-background text-foreground border border-border hover:shadow-md">
+            <div className="bg-primary/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-blue-600 dark:text-blue-400"
+                className="h-8 w-8 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -62,19 +62,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Task Management</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-foreground">Task Management</h3>
+            <p className="text-muted-foreground">
               Organize tasks with deadlines, priority levels, and smart
               categorization. Never miss an important deadline again.
             </p>
           </div>
 
           {/* Habit Tracking */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 mb-6">
+          <div className="bg-background text-foreground border border-border hover:shadow-md">
+            <div className="bg-primary/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-green-600 dark:text-green-400"
+                className="h-8 w-8 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -87,19 +87,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Habit Tracking</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-foreground">Habit Tracking</h3>
+            <p className="text-muted-foreground">
               Build consistency with daily, weekly, and monthly habit tracking.
               Visualize your progress and stay motivated.
             </p>
           </div>
 
           {/* Journaling */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 mb-6">
+          <div className="bg-background text-foreground border border-border hover:shadow-md">
+            <div className="bg-primary/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-purple-600 dark:text-purple-400"
+                className="h-8 w-8 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -112,19 +112,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Journaling</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-foreground">Journaling</h3>
+            <p className="text-muted-foreground">
               Capture your thoughts, track your mood, and reflect on your day.
               Journal entries with rich formatting and media support.
             </p>
           </div>
 
           {/* Goal Setting */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900 mb-6">
+          <div className="bg-background text-foreground border border-border hover:shadow-md">
+            <div className="bg-primary/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-amber-600 dark:text-amber-400"
+                className="h-8 w-8 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -137,19 +137,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Goal Setting</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-foreground">Goal Setting</h3>
+            <p className="text-muted-foreground">
               Set and track meaningful goals with milestones. Break down big
               ambitions into achievable steps.
             </p>
           </div>
 
           {/* Note Taking */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 dark:bg-red-900 mb-6">
+          <div className="bg-background text-foreground border border-border hover:shadow-md">
+            <div className="bg-primary/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-red-600 dark:text-red-400"
+                className="h-8 w-8 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -162,19 +162,19 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Note Taking</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-foreground">Note Taking</h3>
+            <p className="text-muted-foreground">
               Capture ideas instantly with our powerful note-taking system.
               Organize with tags and pin important notes.
             </p>
           </div>
 
           {/* Project Management */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-cyan-100 dark:bg-cyan-900 mb-6">
+          <div className="bg-background text-foreground border border-border hover:shadow-md">
+            <div className="bg-primary/10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-cyan-600 dark:text-cyan-400"
+                className="h-8 w-8 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -187,8 +187,8 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Project Management</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-foreground">Project Management</h3>
+            <p className="text-muted-foreground">
               Manage complex projects with subtasks, deadlines, and progress
               tracking. Keep everything organized in one place.
             </p>
@@ -201,7 +201,7 @@ export default function Home() {
         id="demo"
         className="py-20 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto"
       >
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 md:p-12 text-white">
+        <div className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Transform Your Productivity?

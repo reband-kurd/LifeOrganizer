@@ -1,299 +1,216 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
-// Sidebar Component
-const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const menuItems = [
-    { name: "Dashboard", icon: "dashboard", href: "/dashbord" },
-    { name: "Tasks", icon: "task", href: "/dashbord/tasks" },
-    { name: "Habits", icon: "habit", href: "/dashbord/habits" },
-    { name: "Notes", icon: "notes", href: "/dashbord/notes" },
-    { name: "Events", icon: "event", href: "/dashbord/events" },
-    { name: "Goals", icon: "goal", href: "/dashbord/goals" },
-    { name: "Journals", icon: "journal", href: "/dashbord/journals" },
-    { name: "Projects", icon: "project", href: "/dashbord/projects" },
-  ];
+// Mock API service (replace with real API calls later)
+const fetchDashboardData = async () => {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  return (
-    <>
-      {/* Mobile backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-          onClick={toggleSidebar}
-        />
-      )}
-
-      {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 transition-transform duration-300 transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:z-10`}
-      >
-        {/* Logo */}
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
-          <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            LifeOrganizer
-          </h1>
-        </div>
-
-        {/* Menu */}
-        <nav className="mt-6 px-4">
-          <ul className="space-y-1">
-            {menuItems.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  <span className="flex items-center justify-center w-6 h-6">
-                    {getIcon(item.icon)}
-                  </span>
-                  <span>{item.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* User Profile */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-800">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-              JD
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-900 dark:text-white">
-                John Doe
-              </h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                john@example.com
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+  return {
+    stats: {
+      tasks: {
+        total: 14,
+        completed: 8,
+        overdue: 2,
+        upcoming: 4,
+      },
+      habits: {
+        total: 9,
+        streak: 12,
+        completed: 6,
+        rate: 87,
+      },
+      notes: {
+        total: 32,
+        recent: 5,
+        pinned: 3,
+      },
+      projects: {
+        total: 6,
+        active: 3,
+        completed: 2,
+        onHold: 1,
+      },
+    },
+    schedule: [
+      {
+        id: 1,
+        time: "09:00 AM",
+        title: "Morning Workout",
+        category: "Habit",
+        color: "green",
+        completed: true,
+      },
+      {
+        id: 2,
+        time: "10:30 AM",
+        title: "Client Meeting",
+        category: "Event",
+        color: "blue",
+        location: "Zoom",
+        completed: false,
+      },
+      {
+        id: 3,
+        time: "01:00 PM",
+        title: "Lunch with Team",
+        category: "Event",
+        color: "amber",
+        location: "Cafe Downtown",
+        completed: false,
+      },
+      {
+        id: 4,
+        time: "03:00 PM",
+        title: "Project Review",
+        category: "Task",
+        color: "purple",
+        priority: "High",
+        completed: false,
+      },
+      {
+        id: 5,
+        time: "05:30 PM",
+        title: "Evening Reading",
+        category: "Habit",
+        color: "indigo",
+        completed: false,
+      },
+    ],
+    activities: [
+      {
+        id: 1,
+        title: "Completed task",
+        detail: "Website homepage redesign",
+        time: "24 minutes ago",
+        icon: "check-circle",
+      },
+      {
+        id: 2,
+        title: "Added new habit",
+        detail: "Evening meditation practice",
+        time: "2 hours ago",
+        icon: "plus-circle",
+      },
+      {
+        id: 3,
+        title: "Updated project",
+        detail: "Mobile app development timeline",
+        time: "Yesterday at 4:30 PM",
+        icon: "refresh",
+      },
+      {
+        id: 4,
+        title: "Created note",
+        detail: "Ideas for the marketing campaign",
+        time: "Yesterday at 2:15 PM",
+        icon: "document",
+      },
+    ],
+    goals: [
+      {
+        id: 1,
+        title: "Launch Mobile App",
+        progress: 68,
+        daysLeft: 17,
+        category: "Work",
+      },
+      {
+        id: 2,
+        title: "Read 25 Books This Year",
+        progress: 52,
+        daysLeft: 112,
+        category: "Personal",
+      },
+      {
+        id: 3,
+        title: "Complete Advanced React Course",
+        progress: 34,
+        daysLeft: 45,
+        category: "Education",
+      },
+    ],
+  };
 };
 
-// Dashboard content component
-const DashboardContent = () => {
+// Dashboard content component with real data
+export default function Dashboard() {
+  const [loading, setLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchDashboardData();
+        setDashboardData(data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load dashboard data");
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center min-h-[60vh]">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-t-blue-600 border-blue-200 rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+            Loading your dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
+          <h2 className="text-xl font-medium text-red-800 dark:text-red-200 mb-2">
+            Something went wrong
+          </h2>
+          <p className="text-red-600 dark:text-red-300">{error}</p>
+          <button
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
+      {/* Welcome Section */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Welcome back, John!</h1>
+        <p className="text-gray-600 dark:text-gray-300">
+          Here's what's happening with your tasks and goals today.
+        </p>
+      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {[
-          { title: "Tasks", count: 12, color: "blue" },
-          { title: "Habits", count: 8, color: "green" },
-          { title: "Notes", count: 24, color: "amber" },
-          { title: "Projects", count: 5, color: "purple" },
-        ].map((stat) => (
-          <div
-            key={stat.title}
-            className={`p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm border-l-4 border-${stat.color}-500`}
-          >
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-              {stat.title}
-            </p>
-            <p className="mt-2 text-3xl font-bold">{stat.count}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Today's Schedule */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4">Today's Schedule</h2>
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-          <div className="space-y-4">
-            {[
-              {
-                time: "09:00 AM",
-                title: "Morning Routine",
-                category: "Habit",
-                color: "green",
-              },
-              {
-                time: "10:30 AM",
-                title: "Project Meeting",
-                category: "Event",
-                color: "blue",
-              },
-              {
-                time: "01:00 PM",
-                title: "Lunch Break",
-                category: "Task",
-                color: "amber",
-              },
-              {
-                time: "03:00 PM",
-                title: "Weekly Review",
-                category: "Task",
-                color: "purple",
-              },
-            ].map((event, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-gray-700"
-              >
-                <div className="text-sm text-gray-500 dark:text-gray-400 w-20">
-                  {event.time}
-                </div>
-                <div
-                  className={`w-2 h-2 rounded-full bg-${event.color}-500`}
-                ></div>
-                <div>
-                  <p className="font-medium">{event.title}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {event.category}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Activities & Goal Progress */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activities */}
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Recent Activities</h2>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-            <div className="space-y-4">
-              {[
-                {
-                  title: "Added new task",
-                  detail: "Complete project proposal",
-                  time: "2 hours ago",
-                },
-                {
-                  title: "Completed habit",
-                  detail: "Morning meditation",
-                  time: "4 hours ago",
-                },
-                {
-                  title: "Created note",
-                  detail: "Meeting notes with team",
-                  time: "1 day ago",
-                },
-                {
-                  title: "Updated project",
-                  detail: "Website redesign progress",
-                  time: "2 days ago",
-                },
-              ].map((activity, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-start gap-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-gray-700"
-                >
-                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center mt-1">
-                    <span>✓</span>
-                  </div>
-                  <div>
-                    <p className="font-medium">{activity.title}</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                      {activity.detail}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {activity.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-blue-100 text-sm font-medium uppercase">
+                Tasks
+              </p>
+              <p className="mt-1 text-3xl font-bold">
+                {dashboardData.stats.tasks.total}
+              </p>
             </div>
-          </div>
-        </div>
-
-        {/* Goal Progress */}
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Goal Progress</h2>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-            <div className="space-y-6">
-              {[
-                {
-                  title: "Complete Website Redesign",
-                  progress: 75,
-                  daysLeft: 12,
-                },
-                {
-                  title: "Read 20 Books This Year",
-                  progress: 45,
-                  daysLeft: 120,
-                },
-                { title: "Learn Spanish", progress: 30, daysLeft: 180 },
-              ].map((goal, idx) => (
-                <div key={idx}>
-                  <div className="flex justify-between mb-2">
-                    <span className="font-medium">{goal.title}</span>
-                    <span className="text-sm text-gray-500">
-                      {goal.progress}%
-                    </span>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-2">
-                    <div
-                      className="h-full bg-blue-600 rounded-full"
-                      style={{ width: `${goal.progress}%` }}
-                    ></div>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {goal.daysLeft} days remaining
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Helper function to get icons (simple text representation for now)
-// You can replace these with actual SVG icons or an icon library
-function getIcon(iconName) {
-  const iconMap = {
-    dashboard: "📊",
-    task: "✓",
-    habit: "🔄",
-    notes: "📝",
-    event: "📅",
-    goal: "🎯",
-    journal: "📔",
-    project: "📁",
-  };
-
-  return iconMap[iconName] || "•";
-}
-
-// Main Dashboard Page
-export default function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-
-      {/* Main Content */}
-      <div className="lg:ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm">
-          <div className="flex items-center justify-between h-16 px-4">
-            {/* Mobile Menu Button */}
-            <button
-              onClick={toggleSidebar}
-              className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <span className="sr-only">Open menu</span>
+            <div className="p-2 bg-white/20 rounded-lg">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -304,57 +221,267 @@ export default function Dashboard() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                 />
               </svg>
-            </button>
-
-            {/* Search */}
-            <div className="hidden md:block flex-1 px-4 max-w-md">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Search..."
-                />
-              </div>
             </div>
+          </div>
+          <div className="mt-3 flex space-x-4 text-sm">
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.tasks.completed}
+              </span>{" "}
+              completed
+            </p>
+            <p>
+              <span className="font-medium text-red-200">
+                {dashboardData.stats.tasks.overdue}
+              </span>{" "}
+              overdue
+            </p>
+          </div>
+        </div>
 
-            {/* Right Side Nav Items */}
-            <div className="flex items-center gap-3">
-              <button className="p-2 rounded-full text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-green-100 text-sm font-medium uppercase">
+                Habits
+              </p>
+              <p className="mt-1 text-3xl font-bold">
+                {dashboardData.stats.habits.total}
+              </p>
+            </div>
+            <div className="p-2 bg-white/20 rounded-lg">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            </div>
+          </div>
+          <div className="mt-3 flex space-x-4 text-sm">
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.habits.streak}
+              </span>{" "}
+              day streak
+            </p>
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.habits.rate}%
+              </span>{" "}
+              completion
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl shadow-lg p-6 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-amber-100 text-sm font-medium uppercase">
+                Notes
+              </p>
+              <p className="mt-1 text-3xl font-bold">
+                {dashboardData.stats.notes.total}
+              </p>
+            </div>
+            <div className="p-2 bg-white/20 rounded-lg">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div className="mt-3 flex space-x-4 text-sm">
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.notes.recent}
+              </span>{" "}
+              recent
+            </p>
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.notes.pinned}
+              </span>{" "}
+              pinned
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-purple-100 text-sm font-medium uppercase">
+                Projects
+              </p>
+              <p className="mt-1 text-3xl font-bold">
+                {dashboardData.stats.projects.total}
+              </p>
+            </div>
+            <div className="p-2 bg-white/20 rounded-lg">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div className="mt-3 flex space-x-4 text-sm">
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.projects.active}
+              </span>{" "}
+              active
+            </p>
+            <p>
+              <span className="font-medium">
+                {dashboardData.stats.projects.completed}
+              </span>{" "}
+              completed
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Today's Schedule */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Today's Schedule</h2>
+          <Link
+            href="/dashbord/events"
+            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
+          >
+            View all
+            <svg
+              className="w-4 h-4 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          {dashboardData.schedule.length === 0 ? (
+            <div className="text-center py-8">
+              <svg
+                className="w-12 h-12 text-gray-400 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <h3 className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                No events scheduled for today
+              </h3>
+              <p className="mt-2 text-gray-500 dark:text-gray-400">
+                Enjoy your free time or add a new event
+              </p>
+              <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                Add Event
               </button>
-              <button className="p-2 rounded-full text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            </div>
+          ) : (
+            <div className="space-y-5">
+              {dashboardData.schedule.map((event) => (
+                <div
+                  key={event.id}
+                  className="flex items-center gap-4 p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                >
+                  <div
+                    className={`min-w-[4rem] text-sm font-medium text-gray-900 dark:text-white`}
+                  >
+                    {event.time}
+                  </div>
+                  <div
+                    className={`flex-shrink-0 w-1 h-12 bg-${event.color}-500 rounded-full`}
+                  ></div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h3
+                        className={`font-medium ${
+                          event.completed
+                            ? "line-through text-gray-500 dark:text-gray-400"
+                            : "text-gray-900 dark:text-white"
+                        }`}
+                      >
+                        {event.title}
+                      </h3>
+                      <div className="flex items-center">
+                        {event.location && (
+                          <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md mr-2">
+                            {event.location}
+                          </span>
+                        )}
+                        {event.priority && (
+                          <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-300 px-2 py-1 rounded-md mr-2">
+                            {event.priority}
+                          </span>
+                        )}
+                        <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      {event.category}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <button className="w-full mt-2 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500 dark:hover:border-blue-500 transition-colors flex items-center justify-center">
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 mr-2"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -363,24 +490,177 @@ export default function Dashboard() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
+                </svg>
+                Add New Event
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Recent Activities & Goal Progress */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Activities */}
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Recent Activities</h2>
+            <button className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+              View all
+            </button>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div className="space-y-6">
+              {dashboardData.activities.map((activity) => (
+                <div key={activity.id} className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                    {activity.icon === "check-circle" && (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    )}
+                    {activity.icon === "plus-circle" && (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    )}
+                    {activity.icon === "refresh" && (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                    )}
+                    {activity.icon === "document" && (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between">
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        {activity.title}
+                      </h3>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {activity.time}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                      {activity.detail}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Goal Progress */}
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Goal Progress</h2>
+            <Link
+              href="/dashbord/goals"
+              className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              View all
+            </Link>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div className="space-y-6">
+              {dashboardData.goals.map((goal) => (
+                <div key={goal.id}>
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        {goal.title}
+                      </h3>
+                      <div className="flex items-center mt-1">
+                        <span className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full">
+                          {goal.category}
+                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                          {goal.daysLeft} days left
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+                      {goal.progress}%
+                    </span>
+                  </div>
+                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full ${
+                        goal.progress < 30
+                          ? "bg-red-500"
+                          : goal.progress < 70
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
+                      }`}
+                      style={{ width: `${goal.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+              <button className="w-full mt-2 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500 dark:hover:border-blue-500 transition-colors flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
                 </svg>
+                Add New Goal
               </button>
             </div>
           </div>
-        </header>
-
-        {/* Dashboard Content */}
-        <main className="pb-12">
-          <DashboardContent />
-        </main>
+        </div>
       </div>
     </div>
   );
