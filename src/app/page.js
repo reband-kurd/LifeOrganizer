@@ -19,7 +19,7 @@ export default function Home() {
           </p>
           <div className="flex gap-4 flex-col sm:flex-row">
             <a
-              href="/dashbord"
+              href="/dashboard"
               className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-medium text-lg transition-colors"
             >
               Go to Dashboard
