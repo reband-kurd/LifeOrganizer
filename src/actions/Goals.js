@@ -1,11 +1,11 @@
 "use server";
 import prisma from "@/lib/prisma";
 export async function getAllGoals() {
-  const goals = await prisma.goal.findMany();
+  const goals = await prisma.goals.findMany();
   return goals;
 }
 export async function createGoal(data) {
-  await prisma.goal.create({
+  await prisma.goals.create({
     data: {
       title: data.title,
       description: data.description,
@@ -15,12 +15,12 @@ export async function createGoal(data) {
   });
 }
 export async function deleteGoal(id) {
-  await prisma.goal.delete({
+  await prisma.goals.delete({
     where: { id },
   });
 }
 export async function updateGoal(id, data) {
-  await prisma.goal.update({
+  await prisma.goals.update({
     where: { id },
     data: {
       title: data.title,
