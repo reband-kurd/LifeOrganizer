@@ -1,15 +1,14 @@
 "use server";
 import prisma from "@/lib/prisma";
 export async function getAllEvents() {
-  const events = await prisma.event.findMany();
+  const events = await prisma.events.findMany();
   return events;
 }
 export async function createEvent(data) {
-  await prisma.event.create({
+  await prisma.events.create({
     data: {
       title: data.title,
       description: data.description,
-      date: data.date,
       startsAt: data.startsAt,
       location: data.location,
       endsAt: data.endsAt,
@@ -17,17 +16,16 @@ export async function createEvent(data) {
   });
 }
 export async function deleteEvent(id) {
-  await prisma.event.delete({
+  await prisma.events.delete({
     where: { id },
   });
 }
 export async function updateEvent(id, data) {
-  await prisma.event.update({
+  await prisma.events.update({
     where: { id },
     data: {
       title: data.title,
       description: data.description,
-      date: data.date,
       startsAt: data.startsAt,
       location: data.location,
       endsAt: data.endsAt,
@@ -35,19 +33,19 @@ export async function updateEvent(id, data) {
   });
 }
 export async function getEventById(id) {
-  const event = await prisma.event.findUnique({
+  const event = await prisma.events.findUnique({
     where: { id },
   });
   return event;
 }
 export async function getEventsByDate(date) {
-  const events = await prisma.event.findMany({
+  const events = await prisma.events.findMany({
     where: { date },
   });
   return events;
 }
 export async function getUpcomingEvents() {
-  const events = await prisma.event.findMany({
+  const events = await prisma.events.findMany({
     where: {
       date: {
         gte: new Date(),

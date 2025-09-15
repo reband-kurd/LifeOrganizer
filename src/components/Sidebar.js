@@ -3,41 +3,102 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-// Helper function to get icons
-function getIcon(iconName) {
-  const iconMap = {
-    dashboard: "📊",
-    task: "✓",
-    habit: "🔄",
-    notes: "📝",
-    event: "📅",
-    goal: "🎯",
-    journal: "📔",
-    project: "📁",
-  };
-
-  return iconMap[iconName] || "•";
-}
+import {
+  ChevronDown,
+  ChevronRight,
+  Plus,
+  Settings,
+  Search,
+  LayoutDashboard,
+  CheckSquare,
+  Calendar,
+  FileText,
+  Target,
+  BookOpen,
+  Briefcase,
+  Activity,
+  MoreHorizontal,
+} from "lucide-react";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState("");
+  const [expandedSections, setExpandedSections] = useState({
+    favorites: true,
+    workspace: true,
+  });
 
   useEffect(() => {
     setActiveItem(pathname);
   }, [pathname]);
 
-  const menuItems = [
-    { name: "Dashboard", icon: "dashboard", href: "/dashboard" },
-    { name: "Tasks", icon: "task", href: "/dashboard/tasks" },
-    { name: "Habits", icon: "habit", href: "/dashboard/habits" },
-    { name: "Notes", icon: "notes", href: "/dashboard/notes" },
-    { name: "Events", icon: "event", href: "/dashboard/events" },
-    { name: "Goals", icon: "goal", href: "/dashboard/goals" },
-    { name: "Journals", icon: "journal", href: "/dashboard/journals" },
-    { name: "Projects", icon: "project", href: "/dashboard/projects" },
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
+  const favoriteItems = [
+    {
+      name: "Dashboard",
+      icon: <LayoutDashboard size={16} />,
+      href: "/dashboard",
+    },
+    {
+      name: "Tasks",
+      icon: <CheckSquare size={16} />,
+      href: "/dashboard/tasks",
+    },
   ];
+
+  const workspaceItems = [
+    { name: "Notes", icon: <FileText size={16} />, href: "/dashboard/notes" },
+    { name: "Events", icon: <Calendar size={16} />, href: "/dashboard/events" },
+    { name: "Goals", icon: <Target size={16} />, href: "/dashboard/goals" },
+    {
+      name: "Journals",
+      icon: <BookOpen size={16} />,
+      href: "/dashboard/journals",
+    },
+    {
+      name: "Projects",
+      icon: <Briefcase size={16} />,
+      href: "/dashboard/projects",
+    },
+    { name: "Habits", icon: <Activity size={16} />, href: "/dashboard/habits" },
+  ];
+
+  // Render a sidebar item
+  const renderMenuItem = (item) => (
+    <Link
+      href={item.href}
+      key={item.name}
+      className={`group flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors hover:bg-muted/60
+        ${
+          activeItem === item.href
+            ? "bg-muted/80 text-foreground font-medium"
+            : "text-muted-foreground"
+        }`}
+      onClick={() => setActiveItem(item.href)}
+    >
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center gap-2">
+          <span
+            className={`text-[0.8rem] opacity-70 ${
+              activeItem === item.href ? "opacity-100" : ""
+            }`}
+          >
+            {item.icon}
+          </span>
+          <span>{item.name}</span>
+        </div>
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <MoreHorizontal size={14} className="text-muted-foreground" />
+        </div>
+      </div>
+    </Link>
+  );
 
   return (
     <>
@@ -49,88 +110,127 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         />
       )}
 
-      {/* Sidebar with refined styling */}
+      {/* Sidebar with Notion-like styling */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-background/95 backdrop-blur-sm border-r border-border/40 shadow-lg shadow-background/5 z-50 transition-all duration-300 ease-in-out transform ${
+        className={`fixed top-0 left-0 h-full w-72 bg-background border-r border-border/40 z-50 transition-all duration-300 ease-in-out transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:z-10`}
+        } lg:translate-x-0 lg:z-10 flex flex-col`}
       >
-        {/* Logo section with refined spacing */}
-        <div className="p-6 border-b border-border/40">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            LifeOrganizer
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Organize your life beautifully
-          </p>
+        {/* Header section */}
+        <div className="flex items-center px-3 h-14 border-b border-border/40">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-gradient-to-r from-primary to-primary/70 flex items-center justify-center text-white font-bold text-xs">
+              L
+            </div>
+            <h1 className="text-lg font-semibold">LifeOrganizer</h1>
+          </div>
         </div>
 
-        {/* Menu with improved spacing and visual hierarchy */}
-        <nav className="mt-6 px-4">
-          <div className="text-xs font-medium text-muted-foreground tracking-wider uppercase pl-4 mb-3">
-            Main Menu
+        {/* Search bar - Notion style */}
+        <div className="px-3 py-2">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-muted/60 text-muted-foreground text-sm">
+            <Search size={14} />
+            <span>Search...</span>
+            <span className="ml-auto text-xs px-1 py-0.5 bg-muted rounded border border-border/40">
+              ⌘K
+            </span>
           </div>
-          <ul className="space-y-1.5">
-            {menuItems.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 group
-                    ${
-                      activeItem === item.href
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground/80 hover:bg-primary/5 hover:text-primary"
-                    }`}
-                  onClick={() => setActiveItem(item.href)}
-                >
-                  <span
-                    className={`flex items-center justify-center w-6 h-6 text-lg
-                    ${
-                      activeItem === item.href
-                        ? "text-primary"
-                        : "text-muted-foreground group-hover:text-primary/70"
-                    }`}
-                  >
-                    {getIcon(item.icon)}
-                  </span>
-                  <span>{item.name}</span>
+        </div>
 
-                  {/* Active indicator */}
-                  {activeItem === item.href && (
-                    <span className="ml-auto w-1 h-5 bg-primary rounded-full"></span>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Quick Actions Section */}
-          <div className="mt-8">
-            <div className="text-xs font-medium text-muted-foreground tracking-wider uppercase pl-4 mb-3">
-              Quick Actions
+        {/* Main sidebar content with scroll */}
+        <div className="flex-1 overflow-y-auto py-2 px-1">
+          {/* Favorites section */}
+          <div className="mb-4 px-2">
+            <div
+              className="flex items-center justify-between py-1 text-xs text-muted-foreground cursor-pointer group"
+              onClick={() => toggleSection("favorites")}
+            >
+              <div className="flex items-center gap-1">
+                {expandedSections.favorites ? (
+                  <ChevronDown size={14} />
+                ) : (
+                  <ChevronRight size={14} />
+                )}
+                <span className="font-medium uppercase tracking-wider">
+                  Favorites
+                </span>
+              </div>
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Plus size={14} />
+              </div>
             </div>
-            <div className="bg-primary/5 rounded-lg p-3 mx-1">
-              <button className="w-full py-2 px-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-md flex items-center justify-center gap-2 transition-colors">
-                <span>+</span> New Task
-              </button>
+
+            {expandedSections.favorites && (
+              <div className="ml-2 mt-1 space-y-1">
+                {favoriteItems.map(renderMenuItem)}
+              </div>
+            )}
+          </div>
+
+          {/* Workspace section */}
+          <div className="mb-4 px-2">
+            <div
+              className="flex items-center justify-between py-1 text-xs text-muted-foreground cursor-pointer group"
+              onClick={() => toggleSection("workspace")}
+            >
+              <div className="flex items-center gap-1">
+                {expandedSections.workspace ? (
+                  <ChevronDown size={14} />
+                ) : (
+                  <ChevronRight size={14} />
+                )}
+                <span className="font-medium uppercase tracking-wider">
+                  Workspace
+                </span>
+              </div>
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Plus size={14} />
+              </div>
+            </div>
+
+            {expandedSections.workspace && (
+              <div className="ml-2 mt-1 space-y-1">
+                {workspaceItems.map(renderMenuItem)}
+              </div>
+            )}
+          </div>
+
+          {/* Private section */}
+          <div className="px-2">
+            <div className="flex items-center justify-between py-1 text-xs text-muted-foreground cursor-pointer group">
+              <div className="flex items-center gap-1">
+                <ChevronRight size={14} />
+                <span className="font-medium uppercase tracking-wider">
+                  Private
+                </span>
+              </div>
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Plus size={14} />
+              </div>
             </div>
           </div>
-        </nav>
+        </div>
 
-        {/* User Profile with improved styling */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border/40 bg-background/80 backdrop-blur-sm">
-          <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-background/80 cursor-pointer transition-all">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/80 to-primary text-white flex items-center justify-center font-medium shadow-sm">
+        {/* Quick Add button - Notion style */}
+        <div className="px-3 py-2">
+          <button className="w-full py-1.5 px-3 bg-muted hover:bg-muted/80 text-foreground rounded-md flex items-center justify-center gap-2 transition-colors text-sm">
+            <Plus size={16} /> New Page
+          </button>
+        </div>
+
+        {/* User Profile - Notion style */}
+        <div className="p-3 border-t border-border/40">
+          <div className="flex items-center gap-2 p-2 rounded-md hover:bg-muted/60 cursor-pointer transition-all">
+            <div className="w-7 h-7 rounded-md bg-primary/80 text-white flex items-center justify-center font-medium text-sm">
               JD
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="font-medium text-foreground truncate">John Doe</h4>
-              <p className="text-xs text-muted-foreground truncate">
-                john@example.com
-              </p>
+              <h4 className="text-sm font-medium text-foreground truncate">
+                John Doe's Workspace
+              </h4>
             </div>
-            <button className="p-1.5 rounded-md hover:bg-background/90">
-              <span className="text-muted-foreground">⚙️</span>
+            <button className="p-1 rounded-md hover:bg-muted">
+              <Settings size={14} className="text-muted-foreground" />
             </button>
           </div>
         </div>

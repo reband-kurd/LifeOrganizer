@@ -171,7 +171,7 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="p-6">
+      <div className="p-16">
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
           <h2 className="text-xl font-medium text-red-800 dark:text-red-200 mb-2">
             Something went wrong
