@@ -67,6 +67,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       href: "/dashboard/projects",
     },
     { name: "Habits", icon: <Activity size={16} />, href: "/dashboard/habits" },
+    {
+      name: "Time Schedualr",
+      icon: <Calendar size={16} />,
+      href: "/dashboard/timeSchedule",
+    },
   ];
 
   // Render a sidebar item

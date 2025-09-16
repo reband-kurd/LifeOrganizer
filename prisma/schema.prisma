@@ -116,4 +116,5 @@ model TimeSchedule{
   endTime DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  dayOfWeek String?
 }
