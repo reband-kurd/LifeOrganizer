@@ -1,16 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { getSession } from "@/actions/user";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const router = useRouter();
+  useEffect(() => {
+    async function fetchSession() {
+      const userSession = await getSession();
+      setSession(userSession);
+    }
+    fetchSession();
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  if (session === null) {
+    router.push("/login");
+    return null; // or a loading spinner
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

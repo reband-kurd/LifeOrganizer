@@ -1,120 +1,197 @@
+
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
-model Tasks{
-  id Int @id @default(autoincrement())
-  title String
-  StartsAt DateTime
-  EndsAt DateTime
-  isDone Boolean @default(false)
-  Calenderdays Calenderdays[]
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  role          String    @default("STANDARD") // "ADMIN", "STANDARD", "GUEST"
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Tasks {
+  id             Int            @id @default(autoincrement())
+  title          String
+  StartsAt       DateTime
+  EndsAt         DateTime
+  isDone         Boolean        @default(false)
+  Calenderdays   Calenderdays[]
   calenderdaysId Int
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Calenderdays {
+  id    Int      @id @default(autoincrement())
+  date  DateTime
+  tasks Tasks[]
+}
+
+model Notes {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  isPinned  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-model Calenderdays{
-  id Int @id @default(autoincrement())
-  date DateTime
-  tasks Tasks[] 
-}
-model Notes{
-  id Int @id @default(autoincrement())
-  title String
-  content String
-  isPinned Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model Events{
-  id Int @id @default(autoincrement())
-  title String
+
+model Events {
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  location String
-  startsAt DateTime
-  endsAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  location    String
+  startsAt    DateTime
+  endsAt      DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
-model Habits{
-  id Int @id @default(autoincrement())
+
+model Habits {
+  id            Int            @id @default(autoincrement())
   HabitsTracker HabitTracker[]
-  title String
+  title         String
+  description   String
+  frequency     String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model HabitTracker {
+  id          Int      @id @default(autoincrement())
+  habitId     Int
+  date        DateTime
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  habit       Habits   @relation(fields: [habitId], references: [id])
+}
+
+model Goals {
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  frequency String
+  deadline    DateTime
+  isAchieved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Journals {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  mood      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-model HabitTracker{
-  id Int @id @default(autoincrement())
-  habitId Int
-  date DateTime
-  isCompleted Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  habit Habits @relation(fields: [habitId], references: [id])
-}
-model Goals{
-  id Int @id @default(autoincrement())
-  title String
+
+model Projects {
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  deadline DateTime
-  isAchieved Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  deadline    DateTime
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
-model Journals{
-  id Int @id @default(autoincrement())
-  title String
-  content String
-  mood String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model Projects{
-  id Int @id @default(autoincrement())
-  title String
+
+model Lectures {
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  deadline DateTime
-  isCompleted Boolean @default(false)
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Exams {
+  id        Int      @id @default(autoincrement())
+  subject   String
+  date      DateTime
+  location  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-model Lectures{
-  id Int @id @default(autoincrement())
-  title String
+
+model Assignments {
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  date DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  dueDate     DateTime
+  isSubmitted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
-model Exams{
-  id Int @id @default(autoincrement())
-  subject String
-  date DateTime
-  location String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model Assignments{
-  id Int @id @default(autoincrement())
-  title String
+
+model TimeSchedule {
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  dueDate DateTime
-  isSubmitted Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model TimeSchedule{
-  id Int @id @default(autoincrement())
-  title String
-  description String
-  startTime DateTime
-  endTime DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  dayOfWeek String?
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  dayOfWeek   String?
 }
