@@ -33,7 +33,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-
+      {/* i will be coming back soon :3 */}
       {/* Features Section */}
       <section
         id="features"
